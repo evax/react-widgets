@@ -1,5 +1,15 @@
 /*! (c) 2016 Jason Quense | https://github.com/jquense/react-widgets/blob/master/License.txt */
-/******/ (function(modules) { // webpackBootstrap
+(function webpackUniversalModuleDefinition(root, factory) {
+	if(typeof exports === 'object' && typeof module === 'object')
+		module.exports = factory(require("ReactWidgets"));
+	else if(typeof define === 'function' && define.amd)
+		define(["ReactWidgets"], factory);
+	else if(typeof exports === 'object')
+		exports["ReactWidgets"] = factory(require("ReactWidgets"));
+	else
+		root["ReactWidgets"] = factory(root["ReactWidgets"]);
+})(this, function(__WEBPACK_EXTERNAL_MODULE_86__) {
+return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
 
@@ -41,23 +51,9 @@
 /******/ 	return __webpack_require__(0);
 /******/ })
 /************************************************************************/
-/******/ ([
-/* 0 */
-/***/ function(module, exports, __webpack_require__) {
+/******/ ({
 
-	/*** IMPORTS FROM imports-loader ***/
-	var module = __webpack_require__(1);
-	var args = [moment];
-
-
-	if (typeof module === 'function') {
-	  module.apply(null, args || [])
-	}
-
-
-
-/***/ },
-/* 1 */
+/***/ 0:
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -66,7 +62,7 @@
 
 	exports.__esModule = true;
 
-	var _configure = __webpack_require__(3);
+	var _configure = __webpack_require__(86);
 
 	var _configure2 = babelHelpers.interopRequireDefault(_configure);
 
@@ -116,7 +112,10 @@
 	    },
 
 	    parse: function parse(value, format, culture) {
-	      return value ? getMoment(culture, value, format).toDate() : null;
+	      if (!value) return null;
+	      var m = getMoment(culture, value, format);
+	      if (m.isValid()) return m.toDate();
+	      return null;
 	    },
 
 	    format: function format(value, _format, culture) {
@@ -132,7 +131,8 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 2 */
+
+/***/ 2:
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;(function (root, factory) {
@@ -232,10 +232,14 @@
 	})
 
 /***/ },
-/* 3 */
+
+/***/ 86:
 /***/ function(module, exports) {
 
-	module.exports = window.ReactWidgets;
+	module.exports = __WEBPACK_EXTERNAL_MODULE_86__;
 
 /***/ }
-/******/ ]);
+
+/******/ })
+});
+;

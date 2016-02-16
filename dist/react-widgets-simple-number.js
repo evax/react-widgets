@@ -1,5 +1,15 @@
 /*! (c) 2016 Jason Quense | https://github.com/jquense/react-widgets/blob/master/License.txt */
-/******/ (function(modules) { // webpackBootstrap
+(function webpackUniversalModuleDefinition(root, factory) {
+	if(typeof exports === 'object' && typeof module === 'object')
+		module.exports = factory(require("ReactWidgets"));
+	else if(typeof define === 'function' && define.amd)
+		define(["ReactWidgets"], factory);
+	else if(typeof exports === 'object')
+		exports["ReactWidgets"] = factory(require("ReactWidgets"));
+	else
+		root["ReactWidgets"] = factory(root["ReactWidgets"]);
+})(this, function(__WEBPACK_EXTERNAL_MODULE_86__) {
+return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
 
@@ -41,23 +51,9 @@
 /******/ 	return __webpack_require__(0);
 /******/ })
 /************************************************************************/
-/******/ ([
-/* 0 */
-/***/ function(module, exports, __webpack_require__) {
+/******/ ({
 
-	/*** IMPORTS FROM imports-loader ***/
-	var module = __webpack_require__(1);
-	var args = [];
-
-
-	if (typeof module === 'function') {
-	  module.apply(null, args || [])
-	}
-
-
-
-/***/ },
-/* 1 */
+/***/ 0:
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -67,34 +63,41 @@
 	exports.__esModule = true;
 	exports['default'] = simpleNumber;
 
-	var _configure = __webpack_require__(3);
+	var _configure = __webpack_require__(86);
 
 	var _configure2 = babelHelpers.interopRequireDefault(_configure);
 
-	var _formatNumberWithString = __webpack_require__(4);
+	var _formatNumberWithString = __webpack_require__(87);
 
 	var _formatNumberWithString2 = babelHelpers.interopRequireDefault(_formatNumberWithString);
 
-	var _deconstructNumberFormat = __webpack_require__(5);
+	var _deconstructNumberFormat = __webpack_require__(88);
 
 	var _deconstructNumberFormat2 = babelHelpers.interopRequireDefault(_deconstructNumberFormat);
 
-	function simpleNumber() {
+	var defaults = {
+	  decimal: '.',
+	  grouping: ','
+	};
+
+	function simpleNumber(options) {
+	  var _babelHelpers$_extends = babelHelpers._extends({}, defaults, options);
+
+	  var decimal = _babelHelpers$_extends.decimal;
+	  var grouping = _babelHelpers$_extends.grouping;
 
 	  var localizer = {
 	    formats: {
-	      'default': '-#,##0.'
+	      'default': '-#' + grouping + '##0' + decimal
 	    },
 
-	    parse: function parse(value, format) {
+	    // TODO major bump consistent ordering
+	    parse: function parse(value, culture, format) {
 	      if (format) {
-	        var data = _deconstructNumberFormat2['default'](format);
+	        var data = _deconstructNumberFormat2['default'](format),
+	            negative = data.negativeLeftSymbol && value.indexOf(data.negativeLeftSymbol) !== -1 || data.negativeRightSymbol && value.indexOf(data.negativeRightSymbol) !== -1;
 
-	        if (data.negativeLeftPos !== -1) value = value.substr(data.negativeLeftPos + 1);
-
-	        if (data.negativeRightPos !== -1) value = value.substring(0, data.negativeRightPos);
-
-	        value = value.replace(data.prefix, '').replace(data.suffix, '');
+	        value = value.replace(data.negativeLeftSymbol, '').replace(data.negativeRightSymbol, '').replace(data.prefix, '').replace(data.suffix, '');
 
 	        var halves = value.split(data.decimalChar);
 
@@ -102,15 +105,23 @@
 
 	        if (data.decimalsSeparator) halves[1] = halves[1].replace(new RegExp('\\' + data.decimalsSeparator, 'g'));
 
-	        value = halves.join(data.decimalChar);
-	      }
-	      var number = parseFloat(value);
+	        if (halves[1] === '') halves.pop();
 
-	      return number;
+	        value = halves.join('.');
+	        value = +value;
+
+	        if (negative) value = -1 * value;
+	      } else value = parseFloat(value);
+
+	      return isNaN(value) ? null : value;
 	    },
 
 	    format: function format(value, _format) {
 	      return _formatNumberWithString2['default'](value, _format);
+	    },
+
+	    decimalChar: function decimalChar(format) {
+	      return format && _deconstructNumberFormat2['default'](format).decimalsSeparator || '.';
 	    },
 
 	    precision: function precision(format) {
@@ -126,7 +137,8 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 2 */
+
+/***/ 2:
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;(function (root, factory) {
@@ -226,19 +238,21 @@
 	})
 
 /***/ },
-/* 3 */
+
+/***/ 86:
 /***/ function(module, exports) {
 
-	module.exports = window.ReactWidgets;
+	module.exports = __WEBPACK_EXTERNAL_MODULE_86__;
 
 /***/ },
-/* 4 */
+
+/***/ 87:
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var deconstructNumberFormat = __webpack_require__(5);
-	var formatFactory = __webpack_require__(6);
+	var deconstructNumberFormat = __webpack_require__(88);
+	var formatFactory = __webpack_require__(89);
 
 	exports = module.exports = function formatNumberWithString(value, requiredFormat, overrideOptions) {
 
@@ -274,7 +288,8 @@
 	};
 
 /***/ },
-/* 5 */
+
+/***/ 88:
 /***/ function(module, exports) {
 
 	'use strict';
@@ -479,7 +494,8 @@
 	};
 
 /***/ },
-/* 6 */
+
+/***/ 89:
 /***/ function(module, exports) {
 
 	
@@ -740,4 +756,7 @@
 
 
 /***/ }
-/******/ ]);
+
+/******/ })
+});
+;
